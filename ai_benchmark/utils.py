@@ -583,11 +583,14 @@ def run_tests(training, inference, micro, verbose, use_CPU, precision, _type, st
             config = tf.ConfigProto(device_count={'GPU': 0})
     else:
         #config = None
-        if testInfo.tf_ver_2:
-            config = tf.compat.v1.ConfigProto()
-        else:
-            config = tf.ConfigProto()
-        config.gpu_options.visible_device_list = '0'
+        # if testInfo.tf_ver_2:
+        #     config = tf.compat.v1.ConfigProto()
+        # else:
+        #     config = tf.ConfigProto()
+        # config.gpu_options.visible_device_list = '0'
+        gpus = tf.config.list_physical_devices('GPU')
+        # 设置第一个 GPU 设备为动态内存增长模式
+        tf.config.experimental.set_memory_growth(gpus[0], True)
         print("##### Config Done")
 
     for test in benchmark_tests:
